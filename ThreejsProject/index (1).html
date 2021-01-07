@@ -1,0 +1,177 @@
+<html>
+
+<head>
+    <title>
+        CG Project
+    </title>
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script src="js/three.js"> </script>
+    <script src="js/three.min.js"> </script>
+    <script src="js/OrbitControls.js"> </script>
+    <script src="js/three.module.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+
+    <script>
+
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        var viewAngle = 45;
+        var nearClipping = 1;
+        var farClipping = 500;
+        
+        var scene = new THREE.Scene();
+
+        var camera = new THREE.PerspectiveCamera(viewAngle, width / height, nearClipping, farClipping);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor("#e5e5e5");
+        renderer.setSize(width, height);
+        
+        document.body.appendChild(renderer.domElement);
+        //controls =  new THREE.OrbitControls(camera,renderer.domElement);
+
+        window.addEventListener('resize', function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        
+        //   create a scene
+        const ground = new THREE.TextureLoader().load( "https://image.freepik.com/free-vector/soccer-green-field_225004-1137.jpg" );
+        ground.wrap1 = THREE.RepeatWrapping;
+        ground.wrap2 = THREE.RepeatWrapping;
+        ground.repeat.set( 1, 1 );
+
+        const road = new THREE.TextureLoader().load( "https://cdna.artstation.com/p/assets/images/images/014/040/290/large/jordan-holbrook-rox.jpg?1542198581" );
+        road.wrap1 = THREE.RepeatWrapping;
+        road.wrap2 = THREE.RepeatWrapping;
+        road.repeat.set( 1, 1 );
+
+        const ball = new THREE.TextureLoader().load( "https://image.shutterstock.com/image-vector/black-white-soccer-ball-pattern-600w-726317005.jpg" );
+        ball.wrap1 = THREE.RepeatWrapping;
+        ball.wrap2 = THREE.RepeatWrapping;
+        ball.repeat.set( 1, 1 );
+
+        var cubeGeometry = new THREE.BoxGeometry(2, 3.5, 0.01);
+        var cubeMaterial = new THREE.MeshLambertMaterial({ map: ground});
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+        var cube2Geometry = new THREE.BoxGeometry(1, 3.5, 0.01);
+        var cube2Material = new THREE.MeshLambertMaterial({ map: road });
+        var cube2 = new THREE.Mesh(cube2Geometry, cube2Material);
+
+        var sphereGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+        var sphereMaterial = new THREE.MeshLambertMaterial({ map: ball });
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        var truckFront1Geometry = new THREE.BoxGeometry(0.3, 0.3, 0.9);
+        var truckFront1Material = new THREE.MeshLambertMaterial({ color: "white"});
+        var truckFront1 = new THREE.Mesh(truckFront1Geometry, truckFront1Material);
+
+        var truckBack1Geometry = new THREE.BoxGeometry(0.4, 1, 0.9);
+        var truckBack1Material = new THREE.MeshLambertMaterial({ color: "blue"});
+        var truckBack1 = new THREE.Mesh(truckBack1Geometry, truckBack1Material);
+
+        var truckFront2Geometry = new THREE.BoxGeometry(0.3, 0.3, 0.9);
+        var truckFront2Material = new THREE.MeshLambertMaterial({ color: "white"});
+        var truckFront2 = new THREE.Mesh(truckFront2Geometry, truckFront2Material);
+
+        var truckBack2Geometry = new THREE.BoxGeometry(0.4, 1, 0.9);
+        var truckBack2Material = new THREE.MeshLambertMaterial({ color: "blue"});
+        var truckBack2 = new THREE.Mesh(truckBack2Geometry, truckBack2Material);
+
+        const points = [];
+        points.push(new THREE.Vector3(10, 0, 0));
+        points.push(new THREE.Vector3(0, 10, 0));
+        points.push(new THREE.Vector3(-10, 0, 10));
+        
+        const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(geometry, material);
+        
+
+        line.position.x=2;
+        line.position.z=-5;
+
+        cube.position.x = -2
+        cube.position.z = -5;
+
+        cube2.position.z = -5;
+
+        sphere.position.z = -4.99;
+        sphere.position.x = -2;
+        cube.position.z = -5;
+
+        truckFront1.position.x = -0.19;
+        truckFront1.position.y = -0.5;
+        truckFront1.position.z = -4.99;
+
+        truckBack1.position.x = -0.19;
+        truckBack1.position.y = -1.05;
+        truckBack1.position.z = -4.99;
+
+        truckFront2.position.x = 0.19;
+        truckFront2.position.y = 0.5;
+        truckFront2.position.z = -4.99;
+
+        truckBack2.position.x = 0.19;
+        truckBack2.position.y = 1.05;
+        truckBack2.position.z = -4.99;
+
+        scene.add(truckFront1);
+        scene.add(truckFront2);
+        scene.add(cube);
+        scene.add(cube2);
+        scene.add(sphere);
+        scene.add(truckBack1);
+        scene.add(truckBack2);
+
+        scene.add(line);
+        
+
+        const light = new THREE.AmbientLight( 0x404040 ); 
+        scene.add( light );
+
+        animate();
+
+        sphereX = -10;
+        for (var i=0; i<15; i++){
+            this.tl = new TimelineMax();
+            this.tl.to(this.sphere.rotation, 0.5, {x: Math.PI*.5, ease: Expo.easeOut})
+
+        }
+        this.tl = new TimelineMax().delay(.3);
+        this.tl.to(this.truckBack1.position, 2, {y: .7, ease: Expo.easeOut})
+        this.tl.to(this.truckFront1.position, 0.5, {y: 1.2, ease: Expo.easeOut})
+
+        this.tl.to(this.truckBack2.position, 2, {y: -.7, ease: Expo.easeOut})
+        this.tl.to(this.truckFront2.position, 0.5, {y: -1.2, ease: Expo.easeOut})
+
+
+        this.tl.to(this.sphere.position, 0.5, {y: .85, ease: Expo.easeOut})
+        this.tl.to(this.sphere.rotation, 0.5, {x: Math.PI*.5, ease: Expo.easeOut})
+    </script>
+</body>
+
+</html>
